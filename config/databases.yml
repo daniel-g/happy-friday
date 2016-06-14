@@ -3,8 +3,8 @@
 default:
   development: &common
     adapter: postgresql
-    username:
-    password:
+    username: <%= ENV['DATABASE_USERNAME'] %>
+    password: <%= ENV['DATABASE_PASSWORD'] %>
     database: happy_friday_development
     min_messages: WARNING
     reconnect: true
@@ -19,23 +19,3 @@ default:
   production:
     <<: *common
     database: happy_friday_production
-
-second_one:
-  development: &common
-    adapter: postgresql
-    username:
-    password:
-    database: second_sample_development
-    min_messages: WARNING
-    reconnect: true
-    pool: 5
-    encoding: unicode
-    host: localhost
-
-  test:
-    <<: *common
-    database: second_sample_test
-
-  production:
-    <<: *common
-    database: second_sample_production

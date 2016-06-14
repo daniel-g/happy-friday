@@ -1,3 +1,15 @@
+GIT
+  remote: git://github.com/daniel-g/framework.git
+  revision: a529455054d9980163a7505ff96caa94f0b92b6f
+  specs:
+    framework (0.0.9)
+      actionpack (~> 4.2, >= 4.2.5.1)
+      activerecord (~> 4.2, >= 4.2.5.1)
+      activesupport (~> 4.2, >= 4.2.5.1)
+      awesome_print (~> 1.6, >= 1.6.1)
+      rake (~> 10.5, >= 10.5.0)
+      thor (~> 0.19, >= 0.19.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -30,14 +42,8 @@ GEM
     arel (6.0.3)
     awesome_print (1.7.0)
     builder (3.2.2)
+    dotenv (2.1.1)
     erubis (2.7.0)
-    framework (0.0.9)
-      actionpack (~> 4.2, >= 4.2.5.1)
-      activerecord (~> 4.2, >= 4.2.5.1)
-      activesupport (~> 4.2, >= 4.2.5.1)
-      awesome_print (~> 1.6, >= 1.6.1)
-      rake (~> 10.5, >= 10.5.0)
-      thor (~> 0.19, >= 0.19.1)
     i18n (0.7.0)
     json (1.8.3)
     loofah (2.0.3)
@@ -47,6 +53,7 @@ GEM
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
+    pg (0.18.4)
     pkg-config (1.1.7)
     rack (1.6.4)
     rack-test (0.6.3)
@@ -69,7 +76,9 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  framework
+  dotenv
+  framework (= 0.0.9)!
+  pg
 
 BUNDLED WITH
-   1.10.6
+   1.12.5
