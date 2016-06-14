@@ -1,0 +1,16 @@
+development: &common
+  enable_logging: yes
+  autoload_paths:
+    - app/models
+  default_timezone: 'Pacific Time (US & Canada)'
+
+test:
+  <<: *common
+  enable_logging: no
+
+staging:
+  <<: *common
+
+production:
+  <<: *common
+  enable_logging: no
