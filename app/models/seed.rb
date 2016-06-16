@@ -10,6 +10,12 @@ class Seed
     create_teams(teams_data)
   end
 
+  def tasks(file:)
+    tasks_data = {}
+    merge_task_generals(store: tasks_data, file: file)
+    create_tasks(tasks_data)
+  end
+
   private
 
   def merge_team_generals(store:, file:)
@@ -32,10 +38,28 @@ class Seed
     end
   end
 
+  def merge_task_generals(store:, file:)
+    CSV.foreach(file, headers: :first_row) do |row|
+      store[row['Task ID']] ||= {}
+      store[row['Task ID']].merge!({
+        external_id: row['Task ID'],
+        dev_estimation: row['Development time'].to_i,
+        qa_estimation: row['Time to test'].to_i
+      })
+    end
+  end
+
   def create_teams(teams_data)
     Team.truncate_table
     teams_data.each do |name, attributes|
       Team.create(attributes)
+    end
+  end
+
+  def create_tasks(tasks_data)
+    Task.truncate_table
+    tasks_data.each do |name, attributes|
+      Task.create(attributes)
     end
   end
 end
