@@ -50,14 +50,14 @@ class Seed
   end
 
   def create_teams(teams_data)
-    Team.truncate_table
+    Team.connection_pool.with_connection { |c| c.truncate(Team.table_name) }
     teams_data.each do |name, attributes|
       Team.create(attributes)
     end
   end
 
   def create_tasks(tasks_data)
-    Task.truncate_table
+    Task.connection_pool.with_connection { |c| c.truncate(Task.table_name) }
     tasks_data.each do |name, attributes|
       Task.create(attributes)
     end
