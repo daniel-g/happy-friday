@@ -4,16 +4,16 @@ class Seed
   include Singleton
 
   def teams(team_file:, performance_file:)
-    teams_data = {}
-    merge_team_generals(store: teams_data, file: team_file)
-    merge_team_performance(store: teams_data, file: performance_file)
-    create_teams(teams_data)
+    data = {}
+    merge_team_generals(store: data, file: team_file)
+    merge_team_performance(store: data, file: performance_file)
+    create_teams(data)
   end
 
   def tasks(file:)
-    tasks_data = {}
-    merge_task_generals(store: tasks_data, file: file)
-    create_tasks(tasks_data)
+    data = {}
+    merge_task_generals(store: data, file: file)
+    create_tasks(data)
   end
 
   private
@@ -49,16 +49,16 @@ class Seed
     end
   end
 
-  def create_teams(teams_data)
+  def create_teams(data)
     Team.connection_pool.with_connection { |c| c.truncate(Team.table_name) }
-    teams_data.each do |name, attributes|
+    data.each do |name, attributes|
       Team.create(attributes)
     end
   end
 
-  def create_tasks(tasks_data)
+  def create_tasks(data)
     Task.connection_pool.with_connection { |c| c.truncate(Task.table_name) }
-    tasks_data.each do |name, attributes|
+    data.each do |name, attributes|
       Task.create(attributes)
     end
   end
