@@ -5,47 +5,50 @@ class Seed
 
   def teams(team_file:, performance_file:)
     data = {}
-    merge_team_generals(store: data, file: team_file)
-    merge_team_performance(store: data, file: performance_file)
+    data.deep_merge! team_generals(file: team_file)
+    data.deep_merge! team_performance(file: performance_file)
     create_teams(data)
   end
 
   def tasks(file:)
     data = {}
-    merge_task_generals(store: data, file: file)
+    data.deep_merge! task_generals(file: file)
     create_tasks(data)
   end
 
   private
 
-  def merge_team_generals(store:, file:)
-    CSV.foreach(file, headers: :first_row) do |row|
-      store[row['City']] ||= {}
-      store[row['City']].merge!({
+  def team_generals(file:)
+    CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|
+      result[row['City']] ||= {}
+      result[row['City']].merge!({
         name: row['City'],
         timezone: row['Timezone'].to_i
       })
+      result
     end
   end
 
-  def merge_team_performance(store:, file:)
-    CSV.foreach(file, headers: :first_row) do |row|
-      store[row['Team']] ||= {}
-      store[row['Team']].merge!({
+  def team_performance(file:)
+    CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|
+      result[row['Team']] ||= {}
+      result[row['Team']].merge!({
         dev_performance: row['Developers'].to_f,
         qa_performance: row['QA'].to_f
       })
+      result
     end
   end
 
-  def merge_task_generals(store:, file:)
-    CSV.foreach(file, headers: :first_row) do |row|
-      store[row['Task ID']] ||= {}
-      store[row['Task ID']].merge!({
+  def task_generals(file:)
+    CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|
+      result[row['Task ID']] ||= {}
+      result[row['Task ID']].merge!({
         external_id: row['Task ID'],
         dev_estimation: row['Development time'].to_i,
         qa_estimation: row['Time to test'].to_i
       })
+      result
     end
   end
 
