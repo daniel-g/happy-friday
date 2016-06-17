@@ -9,6 +9,11 @@
 #  external_id    :integer
 #
 
-class Task < ActiveRecord::Base
-  belongs_to :team
+FactoryGirl.define do
+  factory :task do
+    qa_estimation 1
+    dev_estimation 2
+    team
+    sequence(:external_id)
+  end
 end

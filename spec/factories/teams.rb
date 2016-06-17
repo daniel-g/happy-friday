@@ -9,6 +9,11 @@
 #  dev_performance :decimal(6, 2)
 #
 
-class Team < ActiveRecord::Base
-  has_many :tasks
+FactoryGirl.define do
+  factory :team do
+    sequence(:name) { |n| "team#{n}" }
+    timezone 0
+    qa_performance 0.5
+    dev_performance 1
+  end
 end
