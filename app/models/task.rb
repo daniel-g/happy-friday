@@ -11,4 +11,6 @@
 
 class Task < ActiveRecord::Base
   belongs_to :team
+
+  scope :unassigned, ->{ where(team_id: nil) }
 end
