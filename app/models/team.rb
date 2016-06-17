@@ -11,4 +11,12 @@
 
 class Team < ActiveRecord::Base
   has_many :tasks
+
+  def hours_for(task)
+    task.qa_estimation/qa_performance + task.dev_estimation/dev_performance
+  end
+
+  def current_load
+    tasks.reduce(0){|result, task| result + hours_for(task) }
+  end
 end
