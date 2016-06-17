@@ -20,7 +20,7 @@ class Team < ActiveRecord::Base
     tasks.reduce(0){|result, task| result + hours_for(task) }
   end
 
-  def hours_ahead_of(team)
-    timezone - team.timezone
+  def hours_behind_of(team)
+    team.timezone - timezone
   end
 end
