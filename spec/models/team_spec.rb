@@ -13,6 +13,11 @@ describe Team do
     expect(team.current_load).to eq(team.hours_for(task) + team.hours_for(hard_task))
   end
 
-  it 'tells the hours in difference with another team'
+  it 'tells the hours in difference with another team' do
+    team.timezone = 5
+    west_team = FactoryGirl.create(:team, timezone: -6)
+    expect(team.hours_ahead_of(west_team)).to eq(11)
+  end
+
   it 'tells the tasks assigned to the team'
 end
