@@ -14,10 +14,6 @@ class Team < ActiveRecord::Base
 
   CHECK_IN_TEAM = 9
 
-  def self.eastern_team
-    order(:timezone).last
-  end
-
   def self.last_team_to_finsh
     all.max_by(&:finish_hour_in_eastern_team)
   end
@@ -26,15 +22,21 @@ class Team < ActiveRecord::Base
     CHECK_IN_TEAM + hours_behind_of(Team.eastern_team) + current_load
   end
 
-  def hours_for(task)
-    task.qa_estimation/qa_performance + task.dev_estimation/dev_performance
+  private
+
+  def self.eastern_team
+    order(:timezone).last
+  end
+
+  def hours_behind_of(team)
+    team.timezone - timezone
   end
 
   def current_load
     tasks.reduce(0){|result, task| result + hours_for(task) }
   end
 
-  def hours_behind_of(team)
-    team.timezone - timezone
+  def hours_for(task)
+    task.qa_estimation/qa_performance + task.dev_estimation/dev_performance
   end
 end
