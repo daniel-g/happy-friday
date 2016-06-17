@@ -9,7 +9,7 @@ This app utilizes [Framework](https://github.com/einzige/framework) v0.0.9 and r
 
 # Heads up
 
-There is an error in the data output on how the second task is assigned. Here is the good one:
+There is an error in the data output. Here is the good one:
 ```
 SCHEDULE
 ----------------------------------------
