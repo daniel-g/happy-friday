@@ -20,11 +20,11 @@ describe Team do
     expect(west_team.hours_behind_of(team)).to eq(11)
   end
 
-  it 'calculates the team of reference as the eastern team in timezone' do
+  it 'calculates the eastern team' do
     east_team = FactoryGirl.create(:team, timezone: 2)
     east_team_2 = FactoryGirl.create(:team, timezone: 1)
     west_team = FactoryGirl.create(:team, timezone: -2)
-    expect(Team.team_of_reference). to eq east_team
+    expect(Team.eastern_team). to eq east_team
   end
 
   it 'calculates the hour to finish in the team of reference' do

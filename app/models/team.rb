@@ -14,15 +14,8 @@ class Team < ActiveRecord::Base
 
   CHECK_IN_TEAM = 9
 
-  def team_of_reference
-    @team_of_reference ||= Team.order(:timezone).last
-  end
-
-  def self.find_best_for(task)
-    all.min_by do |team|
-      team.finish_hour_in_eastern_team +
-      team.hours_for(task)
-    end
+  def self.eastern_team
+    order(:timezone).last
   end
 
   def self.last_team_to_finsh
@@ -30,7 +23,7 @@ class Team < ActiveRecord::Base
   end
 
   def finish_hour_in_eastern_team
-    CHECK_IN_TEAM + hours_behind_of(team_of_reference) + current_load
+    CHECK_IN_TEAM + hours_behind_of(Team.eastern_team) + current_load
   end
 
   def hours_for(task)
