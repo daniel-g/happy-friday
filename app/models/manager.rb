@@ -30,17 +30,17 @@ class Manager
   def perform_team_exchange(task, team)
     current_team = task.team
     current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
-    task.switch_team(to: team)
+    task.switch_to_team(team)
     if current_total_time < Team.last_team_to_finsh.finish_hour_in_eastern_team
-      task.switch_team(to: current_team)
+      task.switch_to_team(current_team)
     end
   end
 
   def perform_task_exchange(task, compare_task)
     current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
-    task.switch_team(with: compare_task)
+    task.switch_team_with_task(compare_task)
     if current_total_time < Team.last_team_to_finsh.finish_hour_in_eastern_team
-      task.switch_team(with: compare_task)
+      task.switch_team_with_task(compare_task)
     end
   end
 end

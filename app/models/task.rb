@@ -12,23 +12,16 @@
 class Task < ActiveRecord::Base
   belongs_to :team
 
-  scope :unassigned, ->{ where(team_id: nil) }
-  scope :assigned, ->{ where.not(team_id: nil) }
-
-  def self.unassign_all!
-    update_all(team_id: nil)
+  def switch_to_team(new_team)
+    self.team = new_team
+    save
   end
 
-  def switch_team(to: nil, with: nil)
-    if to.present?
-      self.team = to
-      save
-    elsif with.present?
-      new_team = with.team
-      with.team = self.team
-      self.team = new_team
-      with.save
-      self.save
-    end
+  def switch_team_with_task(other_task)
+    new_team = other_task.team
+    other_task.team = self.team
+    self.team = new_team
+    other_task.save
+    self.save
   end
 end
