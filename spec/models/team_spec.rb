@@ -19,5 +19,7 @@ describe Team do
     expect(team.hours_ahead_of(west_team)).to eq(11)
   end
 
-  it 'tells the tasks assigned to the team'
+  it 'has the tasks assigned to the team' do
+    expect(team.tasks).to include(task)
+  end
 end
