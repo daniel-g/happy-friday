@@ -67,4 +67,21 @@ describe Manager do
       expect(team_2.tasks).to match_array([task_2])
     end
   end
+
+  context 'teams different timezones with different performances' do
+    let!(:task_1){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1) }
+    let!(:task_2){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1) }
+    let!(:task_3){ FactoryGirl.create(:unassigned_task, dev_estimation: 1, qa_estimation: 2) }
+
+    let!(:moscow){ FactoryGirl.create(:team, timezone: 3, dev_performance: 1, qa_performance: 0.5) }
+    let!(:zagreb){ FactoryGirl.create(:team, timezone: 2, dev_performance: 0.25, qa_performance: 0.25) }
+    let!(:london){ FactoryGirl.create(:team, timezone: 0, dev_performance: 0.7, qa_performance: 1) }
+
+    it 'assigns tasks accordingly' do
+      Manager.instance.assing_all_tasks!
+      expect(moscow.tasks).to match_array([task_1, task_3])
+      expect(zagreb.tasks).to be_empty
+      expect(london.tasks).to match_array([task_2])
+    end
+  end
 end
