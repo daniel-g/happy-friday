@@ -56,9 +56,7 @@ describe Manager do
     end
   end
 
-  context 'reconsidering task assignations' do
-    # Case where there is a need for a re assignation
-    # in order to make sure the task is still in the right place
+  context 'teams different timezones with different performances: hard case' do
     let!(:task_1){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1, external_id: 1) }
     let!(:task_2){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1, external_id: 2) }
     let!(:task_3){ FactoryGirl.create(:unassigned_task, dev_estimation: 1, qa_estimation: 2, external_id: 3) }

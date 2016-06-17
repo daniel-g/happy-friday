@@ -4,30 +4,30 @@ class Manager
   def assing_all_tasks!
     raise 'No teams to assign' if Team.count.zero?
     raise 'No tasks to assign' if Task.count.zero?
-    perform_basic_assignation
-    perform_exchanges
+    Task.update_all(team_id: Team.first.id)
+    reassign!
   end
 
   private
 
-  def perform_basic_assignation
-    Task.update_all(team_id: Team.first.id)
-  end
-
-  def perform_exchanges
+  def reassign!
     Team.find_each do |team|
       team.tasks.find_each do |task|
-        Team.where.not(id: team).find_each do |compare_team|
-          perform_team_exchange(task, compare_team)
-          compare_team.tasks.find_each do |compare_task|
-            perform_task_exchange(task, compare_task)
-          end
-        end
+        assign_best_team!(task: task, teams: Team.where.not(id: team))
       end
     end
   end
 
-  def perform_team_exchange(task, team)
+  def assign_best_team!(task:, teams:)
+    teams.find_each do |team|
+      try_switching_team(task: task, team: team)
+      team.tasks.find_each do |other_task|
+        try_switching_tasks(task: task, other_task: other_task)
+      end
+    end
+  end
+
+  def try_switching_team(task:, team:)
     current_team = task.team
     current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
     task.switch_to_team(team)
@@ -36,11 +36,11 @@ class Manager
     end
   end
 
-  def perform_task_exchange(task, compare_task)
+  def try_switching_tasks(task:, other_task:)
     current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
-    task.switch_team_with_task(compare_task)
+    task.switch_team_with_task(other_task)
     if current_total_time < Team.last_team_to_finsh.finish_hour_in_eastern_team
-      task.switch_team_with_task(compare_task)
+      task.switch_team_with_task(other_task)
     end
   end
 end
