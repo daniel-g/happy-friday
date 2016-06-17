@@ -12,8 +12,12 @@
 FactoryGirl.define do
   factory :task do
     qa_estimation 1
-    dev_estimation 2
+    dev_estimation 1
     team
     sequence(:external_id)
+  end
+
+  factory :unassigned_task, parent: :task do
+    team nil
   end
 end
