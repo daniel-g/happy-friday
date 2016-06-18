@@ -19,6 +19,6 @@ describe Seed do
     expect(Task.pluck(:qa_estimation)).to eq([1, 1, 2, 2])
     expect(Task.pluck(:dev_estimation)).to eq([2, 2, 1, 2])
     expect(Task.pluck(:team_id).compact).to eq([])
-    expect(Task.pluck(:external_id)).to eq([1, 2, 3, 4])
+    expect(Task.pluck(:external_id)).to eq(['1', '2', '3', '4'])
   end
 end
