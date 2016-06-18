@@ -7,6 +7,24 @@ The seeding data is [here](https://gist.github.com/einzige/69a5af5a9df1a483c2745
 
 This app utilizes [Framework](https://github.com/einzige/framework) v0.0.9 and rocks MIT license.
 
+# Usage
+
+## 1. Seed the data
+```
+Seed.instance.teams(teams_file: 'folder/to/teams.csv', performance_file: 'folder/to/performance.csv')
+Seed.instance.tasks(file: 'folder/to/tasks.csv')
+```
+
+## 2. Assign tasks
+```
+Manager.instance.assing_all_tasks!
+```
+
+## 3. Generate the report
+```
+Report.new(file_name: 'folder/to/report.csv').generate!
+```
+
 # Heads up
 
 There is an error in the data output. Here is the good one:
