@@ -13,7 +13,7 @@ class TeamSchedule
       task: next_task,
       local_time: Team::CHECK_IN_TEAM + current_load
     )
-    self.task_pointer += 1
+    move_pointer
     task
   end
 
@@ -32,5 +32,9 @@ class TeamSchedule
 
   def next_task
     tasks[task_pointer + 1]
+  end
+
+  def move_pointer
+    self.task_pointer += 1
   end
 end
