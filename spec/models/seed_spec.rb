@@ -3,7 +3,7 @@ require "spec_helper"
 describe Seed do
   it 'seeds teams' do
     Seed.instance.teams(
-      team_file: File.open(Framework.app.root.join('spec' , 'fixtures', 'teams.csv')),
+      teams_file: File.open(Framework.app.root.join('spec' , 'fixtures', 'teams.csv')),
       performance_file: File.open(Framework.app.root.join('spec' , 'fixtures', 'performance.csv'))
     )
     expect(Team.pluck(:name)).to eq(%w{ Moscow Zagreb London })

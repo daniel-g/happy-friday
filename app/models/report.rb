@@ -1,6 +1,12 @@
 class Report
-  def generate!(file_name: nil)
-    CSV.open(file_name || default_file_name, 'wb',
+  attr_accessor :file
+
+  def initialize(file_name: nil)
+    @file = File.open(file_name || default_file_name, 'w')
+  end
+
+  def generate!
+    CSV.open(file, 'wb',
       write_headers: true,
       headers: headers ) do |csv|
         until team_schedules.all?(&:done?) do

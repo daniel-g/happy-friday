@@ -3,9 +3,9 @@ require 'csv'
 class Seed
   include Singleton
 
-  def teams(team_file:, performance_file:)
+  def teams(teams_file:, performance_file:)
     data = {}
-    data.deep_merge! team_generals(file: team_file)
+    data.deep_merge! team_generals(file: teams_file)
     data.deep_merge! team_performance(file: performance_file)
     create_teams(data)
   end
@@ -53,16 +53,20 @@ class Seed
   end
 
   def create_teams(data)
-    Team.connection_pool.with_connection { |c| c.truncate(Team.table_name) }
+    truncate(Team)
     data.each do |name, attributes|
       Team.create(attributes)
     end
   end
 
   def create_tasks(data)
-    Task.connection_pool.with_connection { |c| c.truncate(Task.table_name) }
+    truncate(Task)
     data.each do |name, attributes|
       Task.create(attributes)
     end
+  end
+
+  def truncate model
+    model.connection_pool.with_connection { |c| c.truncate(model.table_name) }
   end
 end
