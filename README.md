@@ -11,8 +11,8 @@ This app utilizes [Framework](https://github.com/einzige/framework) v0.0.9 and r
 
 ## 1. Seed the data
 ```
-Seed.instance.teams(teams_file: 'folder/to/teams.csv', performance_file: 'folder/to/performance.csv')
-Seed.instance.tasks(file: 'folder/to/tasks.csv')
+Seed.instance.teams(teams_file: 'directory/to/teams.csv', performance_file: 'directory/to/performance.csv')
+Seed.instance.tasks(file: 'directory/to/tasks.csv')
 ```
 
 ## 2. Assign tasks
@@ -22,7 +22,7 @@ Manager.instance.assing_all_tasks!
 
 ## 3. Generate the report
 ```
-Report.new(file_name: 'folder/to/report.csv').generate!
+Report.new(file_name: 'custom/directory/to/report.csv').generate!
 ```
 
 ## 4. Open the report :)
