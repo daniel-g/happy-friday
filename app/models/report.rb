@@ -3,15 +3,9 @@ class Report
     CSV.open(file_name || default_file_name, 'wb',
       write_headers: true,
       headers: headers ) do |csv|
-        while(team_schedules.any?) do
-          team_schedules.each do |team_schedule|
-            if task = team_schedule.take_task
-              write_to(csv: csv, task: task)
-            else
-              team_schedules.delete_at(
-                team_schedules.index(team_schedule)
-              )
-            end
+        until team_schedules.all?(&:done?) do
+          team_schedules.reject(&:done?).each do |team_schedule|
+            write(csv: csv, task: team_schedule.take_task!)
           end
         end
     end
@@ -20,7 +14,11 @@ class Report
   private
 
   def team_schedules
-    @team_schedules ||= Team.with_tasks.order('timezone DESC').map{|team| TeamSchedule.new(team: team)}
+    @team_schedules ||= teams.map{|team| TeamSchedule.new(team: team)}
+  end
+
+  def teams
+    @teams ||= Team.with_tasks.order('timezone DESC')
   end
 
   def default_file_name
@@ -31,7 +29,7 @@ class Report
     ['TEAM', 'Local time', 'UTC time', 'TASK No.']
   end
 
-  def write_to(csv:, task:)
+  def write(csv:, task:)
     csv << [
       task.team_name,
       task.local_schedule,

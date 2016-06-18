@@ -7,8 +7,8 @@ class TeamSchedule
     @task_pointer = -1
   end
 
-  def take_task
-    return nil unless next_task
+  def take_task!
+    return nil if done?
     task = TeamSchedule::Task.new(
       team: team,
       task: next_task,
@@ -16,6 +16,10 @@ class TeamSchedule
     )
     self.task_pointer += 1
     task
+  end
+
+  def done?
+    next_task.nil?
   end
 
   private
