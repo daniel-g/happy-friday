@@ -25,6 +25,8 @@ Manager.instance.assing_all_tasks!
 Report.new(file_name: 'folder/to/report.csv').generate!
 ```
 
+## 4. Open the report :)
+
 # Heads up
 
 There is an error in the data output. Here is the good one:
