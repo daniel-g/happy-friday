@@ -24,4 +24,9 @@ class Task < ActiveRecord::Base
     other_task.save
     self.save
   end
+
+  def team_cost
+    raise 'No team assigned' unless team
+    qa_estimation/team.qa_performance + dev_estimation/team.dev_performance
+  end
 end

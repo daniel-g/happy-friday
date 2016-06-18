@@ -20,4 +20,17 @@ describe Task do
     expect(task_1.reload.team).to eq(new_team_1)
     expect(task_2.reload.team).to eq(new_team_2)
   end
+
+  describe 'cost for the team' do
+    it 'calculates the cost for the team' do
+      team = FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5)
+      task = FactoryGirl.create(:task, team: team, dev_estimation: 3, qa_estimation: 5)
+      expect(task.team_cost).to eq(13)
+    end
+
+    it 'raises an exception if no team assigned to that task' do
+      task = FactoryGirl.create(:unassigned_task)
+      expect{ task.team_cost }.to raise_error(RuntimeError)
+    end
+  end
 end

@@ -37,10 +37,6 @@ class Team < ActiveRecord::Base
   end
 
   def current_load
-    tasks.reduce(0){|result, task| result + hours_for(task) }
-  end
-
-  def hours_for(task)
-    task.qa_estimation/qa_performance + task.dev_estimation/dev_performance
+    tasks.reduce(0){|result, task| result + task.team_cost }
   end
 end
