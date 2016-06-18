@@ -6,7 +6,7 @@ describe Report do
   subject(:report) { Report.new(file_name: file_name) }
 
   after do
-    File.delete(file_name)
+    File.delete(file_name) if File.exist?(file_name)
   end
 
   context 'one team in utc' do
@@ -53,5 +53,10 @@ describe Report do
       expect(csv[3]).to match_array([moscow.name, '11:00am - 1:00pm', '8:00am - 10:00am', moscow_2.external_id])
       expect(csv[4]).to match_array([london.name, '11:00am - 1:00pm', '11:00am - 1:00pm', london_2.external_id])
     end
+  end
+
+  it 'raises exception if the directory of the file specified does not exist' do
+    missing_path = Framework.app.root.join('spec/fixtures/missing_folder/report.csv')
+    expect{ Report.new(file_name: missing_path) }.to raise_error(RuntimeError)
   end
 end

@@ -2,6 +2,7 @@ class Report
   attr_accessor :file
 
   def initialize(file_name: nil)
+    raise 'Directory does not exist' unless File.directory?(File.dirname(file_name))
     @file = File.open(file_name || default_file_name, 'w')
   end
 
