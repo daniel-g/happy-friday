@@ -20,7 +20,7 @@ class Report
   private
 
   def team_schedules
-    @team_schedules ||= Team.with_tasks.map{|team| TeamSchedule.new(team: team)}
+    @team_schedules ||= Team.with_tasks.order('timezone DESC').map{|team| TeamSchedule.new(team: team)}
   end
 
   def default_file_name
