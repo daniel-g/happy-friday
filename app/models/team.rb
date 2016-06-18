@@ -39,6 +39,6 @@ class Team < ActiveRecord::Base
   end
 
   def current_load
-    tasks.reduce(0){|result, task| result + task.team_cost }
+    tasks.team_cost
   end
 end

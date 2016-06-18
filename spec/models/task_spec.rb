@@ -33,10 +33,20 @@ describe Task do
   end
 
   describe 'cost for the team' do
-    it 'calculates the cost for the team' do
+    it 'calculates the cost of a task for the team assigned' do
       team = FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5)
       task = FactoryGirl.create(:task, team: team, dev_estimation: 3, qa_estimation: 5)
       expect(task.team_cost).to eq(13)
+    end
+
+    it 'calculates the cost of a group of tasks for the team assigned' do
+      team_1 = FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5)
+      team_2 = FactoryGirl.create(:team, dev_performance: 0.5, qa_performance: 1)
+      team_3 = FactoryGirl.create(:team, dev_performance: 0.25, qa_performance: 0.25)
+      task_1 = FactoryGirl.create(:task, team: team_1, dev_estimation: 3, qa_estimation: 5)
+      task_2 = FactoryGirl.create(:task, team: team_2, dev_estimation: 3, qa_estimation: 5)
+      task_3 = FactoryGirl.create(:task, team: team_3, dev_estimation: 3, qa_estimation: 5)
+      expect(Task.team_cost).to eq(task_1.team_cost + task_2.team_cost + task_3.team_cost)
     end
 
     it 'raises an exception if no team assigned to that task' do

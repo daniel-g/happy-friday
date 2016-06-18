@@ -27,7 +27,7 @@ class TeamSchedule
 
   def current_load
     return 0 if task_pointer < 0
-    tasks[0..task_pointer].reduce(0){|result, task| result + task.team_cost }
+    tasks[0..task_pointer].sum &:team_cost
   end
 
   def next_task
