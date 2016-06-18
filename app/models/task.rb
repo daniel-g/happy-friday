@@ -19,16 +19,13 @@ class Task < ActiveRecord::Base
   }
 
   def switch_to_team(new_team)
-    self.team = new_team
-    save
+    self.update_attributes(team: new_team)
   end
 
   def switch_team_with_task(other_task)
     new_team = other_task.team
-    other_task.team = self.team
-    self.team = new_team
-    other_task.save
-    self.save
+    other_task.update_attributes(team: self.team)
+    self.update_attributes(team: new_team)
   end
 
   def team_cost
