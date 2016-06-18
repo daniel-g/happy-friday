@@ -10,6 +10,11 @@ describe Team do
     expect(team.finish_hour_in_eastern_team).to eq(Team::CHECK_IN_TEAM + 6)
   end
 
+  it 'gets teams with tasks' do
+    team_without_tasks = FactoryGirl.create(:team)
+    expect(Team.with_tasks).to_not include(team_without_tasks)
+  end
+
   it 'has the tasks assigned to the team' do
     expect(team.tasks).to include(task)
   end

@@ -10,9 +10,13 @@
 #
 
 class Team < ActiveRecord::Base
+  CHECK_IN_TEAM = 9
+
   has_many :tasks
 
-  CHECK_IN_TEAM = 9
+  scope :with_tasks, ->{
+    joins('RIGHT JOIN tasks ON teams.id = tasks.team_id').where(tasks: { id: nil })
+  }
 
   def self.last_team_to_finsh
     all.max_by(&:finish_hour_in_eastern_team)
