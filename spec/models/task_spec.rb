@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: tasks
+#
+#  id             :integer          not null, primary key
+#  qa_estimation  :decimal(6, 2)    default(0.0)
+#  dev_estimation :decimal(6, 2)    default(0.0)
+#  team_id        :integer
+#  external_id    :string
+#
+
 require 'spec_helper'
 
 describe Task do

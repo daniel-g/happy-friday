@@ -3,10 +3,10 @@
 # Table name: tasks
 #
 #  id             :integer          not null, primary key
-#  qa_estimation  :integer          default(0)
-#  dev_estimation :integer          default(0)
+#  qa_estimation  :decimal(6, 2)    default(0.0)
+#  dev_estimation :decimal(6, 2)    default(0.0)
 #  team_id        :integer
-#  external_id    :integer
+#  external_id    :string
 #
 
 FactoryGirl.define do

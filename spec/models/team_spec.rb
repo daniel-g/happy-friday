@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: teams
+#
+#  id              :integer          not null, primary key
+#  name            :string
+#  timezone        :decimal(6, 2)
+#  qa_performance  :decimal(6, 2)
+#  dev_performance :decimal(6, 2)
+#
+
 require 'spec_helper'
 
 describe Team do
