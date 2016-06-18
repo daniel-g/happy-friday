@@ -10,7 +10,6 @@ class TeamSchedule
   def take_task!
     return nil if done?
     task = TeamSchedule::Task.new(
-      team: team,
       task: next_task,
       local_time: Team::CHECK_IN_TEAM + current_load
     )
@@ -38,9 +37,9 @@ class TeamSchedule
   class Task
     attr_reader :team, :task, :local_time
 
-    def initialize(team:, task:, local_time:)
-      @team = team
+    def initialize(task:, local_time:)
       @task = task
+      @team = task.team
       @local_time = local_time
     end
 
@@ -56,7 +55,7 @@ class TeamSchedule
       "#{format_time(utc_time)} - #{format_time(utc_time + task.team_cost)}"
     end
 
-    def task_number
+    def external_id
       task.external_id
     end
 

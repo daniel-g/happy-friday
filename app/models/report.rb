@@ -34,7 +34,7 @@ class Report
       task.team_name,
       task.local_schedule,
       task.utc_schedule,
-      task.task_number
+      task.external_id
     ]
   end
 end
