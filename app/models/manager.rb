@@ -29,17 +29,17 @@ class Manager
 
   def try_switching_team(task:, team:)
     current_team = task.team
-    current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
+    current_total_time = Team.last_team_to_finsh.finish_hour_utc
     task.switch_to_team(team)
-    if current_total_time < Team.last_team_to_finsh.finish_hour_in_eastern_team
+    if current_total_time < Team.last_team_to_finsh.finish_hour_utc
       task.switch_to_team(current_team)
     end
   end
 
   def try_switching_tasks(task:, other_task:)
-    current_total_time = Team.last_team_to_finsh.finish_hour_in_eastern_team
+    current_total_time = Team.last_team_to_finsh.finish_hour_utc
     task.switch_team_with_task(other_task)
-    if current_total_time < Team.last_team_to_finsh.finish_hour_in_eastern_team
+    if current_total_time < Team.last_team_to_finsh.finish_hour_utc
       task.switch_team_with_task(other_task)
     end
   end
