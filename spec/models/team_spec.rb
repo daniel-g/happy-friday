@@ -12,6 +12,7 @@ describe Team do
 
   it 'gets teams with tasks' do
     team_without_tasks = FactoryGirl.create(:team)
+    expect(Team.with_tasks).to include(team)
     expect(Team.with_tasks).to_not include(team_without_tasks)
   end
 

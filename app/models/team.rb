@@ -15,7 +15,9 @@ class Team < ActiveRecord::Base
   has_many :tasks
 
   scope :with_tasks, ->{
-    joins('RIGHT JOIN tasks ON teams.id = tasks.team_id').where(tasks: { id: nil })
+    joins('LEFT JOIN tasks ON teams.id = tasks.team_id').
+    where.not(tasks: { id: nil }).
+    uniq
   }
 
   def self.last_team_to_finsh
