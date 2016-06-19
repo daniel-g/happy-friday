@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe Report do
-  subject(:report) { Report.new }
+describe TeamSchedule::Report do
+  subject(:report) { TeamSchedule::Report.new }
 
   context 'one team in utc' do
     let!(:team) { FactoryGirl.create(:team) }
@@ -72,14 +72,18 @@ describe Report do
 
   describe 'CSV generation' do
     it 'generates the CSV of the data generated' do
-      allow_any_instance_of(Report::CSVGenerator).to receive(:generate).and_return('CSV!')
-      expect(Report::CSVGenerator).to receive(:new).with(report: report, file_name: nil).and_call_original
+      allow_any_instance_of(TeamSchedule::Report::CSVGenerator).to receive(:generate).and_return('CSV!')
+      expect(TeamSchedule::Report::CSVGenerator).to(
+        receive(:new)
+          .with(report: report, file_name: nil)
+          .and_call_original
+      )
       expect(report.generate_csv).to eq('CSV!')
     end
 
     it 'raises exception if the directory of the file specified does not exist' do
       missing_path = Framework.app.root.join('spec/fixtures/missing_folder/report.csv')
-      expect{ Report.new.generate_csv(file_name: missing_path) }.to raise_error(RuntimeError)
+      expect{ TeamSchedule::Report.new.generate_csv(file_name: missing_path) }.to raise_error(RuntimeError)
     end
   end
 end
