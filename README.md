@@ -37,6 +37,7 @@ You should see it in `custom/directory/to/report.csv`
 # Heads up
 
 There is an error in the data output. Here is the good one:
+
 ```
 SCHEDULE
 ----------------------------------------
@@ -47,7 +48,9 @@ London  | 9am-2pm    | 9am-2pm  | 2
 Moscow  | 1pm-7pm    | 10am-4pm | 4
 London  | 2pm-6pm    | 2pm-6pm  | 3
 ```
+
 Here is the wrong one (there is a problem with the UTC time of London):
+
 ```
 SCHEDULE
 ----------------------------------------
