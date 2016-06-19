@@ -1,2 +1,4 @@
 .env.local
 reports/*
+.yardoc/
+doc/
