@@ -1,6 +1,9 @@
 class TeamSchedule::Manager
   include Singleton
 
+  # Performs the assignation of all tasks in the database.
+  # Looks for the best schedule in order to finish all teams ASAP
+  #
   def assing_all_tasks!
     raise 'No teams to assign' if Team.count.zero?
     raise 'No tasks to assign' if Task.count.zero?
@@ -16,6 +19,7 @@ class TeamSchedule::Manager
 
   # Performs basic assignations of tasks
   # so that optimization doesn't take a lot of time
+  #
   def basic_assign
     Task.find_each do |task|
       # Whoever lasts the least, takes the job
@@ -27,7 +31,8 @@ class TeamSchedule::Manager
     end
   end
 
-  # Performs exchange of tasks if needed: from team to team or from task to task
+  # Optimizes the current task assignations
+  #
   def optimize
     Team.find_each do |team|
       team.tasks.find_each do |task|
@@ -36,6 +41,11 @@ class TeamSchedule::Manager
     end
   end
 
+  # Performs exchange of tasks if needed: from team to team or from task to task
+  # in the list of teams specified
+  #
+  # @param [Task] task: the task
+  # @param [Array<Team>] teams: teams where to look at
   def assign_best_team(task:, teams:)
     teams.find_each do |team|
       # No need to look at the team tasks if it was changed to this team
@@ -49,6 +59,11 @@ class TeamSchedule::Manager
     end
   end
 
+  # Switches a tasks to another team in order to gain time
+  #
+  # @param [Task] task: the task
+  # @param [Team] team: the team
+  # @return [true, false] true if the switch gains time, false if it didn't switch
   def try_switching_team(task:, team:)
     current_team = task.team
     old_time, new_time = benchmark{ task.switch_to_team(team) }
@@ -59,6 +74,11 @@ class TeamSchedule::Manager
     return false
   end
 
+  # Switches 2 tasks in teams in order to gain time
+  #
+  # @param [Task] task: one task
+  # @param [Task] other_task: the other task
+  # @return [true, false] true if the switch gains time, false if it didn't switch
   def try_switching_tasks(task:, other_task:)
     old_time, new_time = benchmark{ task.switch_team_with_task(other_task) }
     return true if old_time >= new_time
@@ -68,6 +88,11 @@ class TeamSchedule::Manager
     return false
   end
 
+  # Calculates the hour all teams will finish in utc
+  # before and after a block of code is executed
+  #
+  # @param [Proc] &block block of code to execute
+  # @return [Array<Float, Float>] 2 elements array, the first with the current time, the second with the new time
   def benchmark(&block)
     old_total_time = Team.last_team_to_finsh.finish_hour_utc
     block.call
