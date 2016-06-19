@@ -11,6 +11,8 @@ class TeamSchedule::Manager
 
   private
 
+  # Performs basic assignations of tasks
+  # so that optimization doesn't take a lot of time
   def basic_assign!
     Task.find_each do |task|
       # Whoever lasts the least, takes the job
@@ -22,6 +24,7 @@ class TeamSchedule::Manager
     end
   end
 
+  # Performs exchange of tasks if needed: from team to team or from task to task
   def optimize!
     Team.find_each do |team|
       team.tasks.find_each do |task|
@@ -33,8 +36,10 @@ class TeamSchedule::Manager
   def assign_best_team!(task:, teams:)
     teams.find_each do |team|
       if try_switching_team(task: task, team: team)
+        # No need to look at the team tasks if it was changed to this team
         next
       else
+        # Look at the team tasks and see if the task can be switched
         team.tasks.find_each do |other_task|
           try_switching_tasks(task: task, other_task: other_task)
         end
