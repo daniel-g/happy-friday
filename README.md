@@ -17,7 +17,7 @@ Seed.instance.tasks(file: 'directory/to/tasks.csv')
 
 ## 2. Assign tasks
 ```
-Manager.instance.assing_all_tasks!
+TeamSchedule::Manager.instance.assing_all_tasks!
 ```
 
 ## 3. Generate the report

@@ -1,4 +1,4 @@
-class Manager
+class TeamSchedule::Manager
   include Singleton
 
   def assing_all_tasks!
