@@ -21,7 +21,7 @@ class Report
   private
 
   def team_schedules
-    @team_schedules ||= teams.map{|team| TeamSchedule.new(team: team)}
+    @team_schedules ||= teams.map{|team| TeamSchedule::Canvan.new(team: team)}
   end
 
   def teams

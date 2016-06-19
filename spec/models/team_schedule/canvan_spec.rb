@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe TeamSchedule do
+describe TeamSchedule::Canvan do
   let!(:team) { FactoryGirl.create(:team) }
   let!(:task_1) { FactoryGirl.create(:task, team: team) }
   let!(:task_2) { FactoryGirl.create(:task, team: team) }
 
-  subject(:schedule) { TeamSchedule.new(team: team) }
+  subject(:schedule) { TeamSchedule::Canvan.new(team: team) }
 
   it 'sets tasks in order of creation' do
     expect(schedule.tasks).to eq([task_1, task_2])
