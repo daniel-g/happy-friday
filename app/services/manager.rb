@@ -20,9 +20,12 @@ class TeamSchedule::Manager
 
   def assign_best_team!(task:, teams:)
     teams.find_each do |team|
-      try_switching_team(task: task, team: team)
-      team.tasks.find_each do |other_task|
-        try_switching_tasks(task: task, other_task: other_task)
+      if try_switching_team(task: task, team: team)
+        next
+      else
+        team.tasks.find_each do |other_task|
+          try_switching_tasks(task: task, other_task: other_task)
+        end
       end
     end
   end
@@ -33,6 +36,9 @@ class TeamSchedule::Manager
     task.switch_to_team(team)
     if current_total_time < Team.last_team_to_finsh.finish_hour_utc
       task.switch_to_team(current_team)
+      return false
+    else
+      return true
     end
   end
 
