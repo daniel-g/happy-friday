@@ -47,7 +47,7 @@ class Task < ActiveRecord::Base
 
   # Calculates the cost in hours for the team assigned or for a team specified
   #
-  # @param [Team] for_team: nil another team for the calculation, if don't want to use the team assigned
+  # @param [Team] for_team optional another team for the calculation, if don't want to use the team assigned
   # @return [Float] Hours that the team assigned or specified would last for this task
   def team_cost(for_team: nil)
     calc_team = for_team || team

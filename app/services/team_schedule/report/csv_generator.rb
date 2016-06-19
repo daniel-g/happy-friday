@@ -5,8 +5,8 @@ module TeamSchedule
 
       # Initializes the CSV generation
       #
-      # @param [TeamSchedule::Report] report: the report where from get the data
-      # @param [String] file_name: nil path to file where to put the CSV generated
+      # @param [TeamSchedule::Report] report the report where from get the data
+      # @param [String] file_name optional path to file where to put the CSV generated
       def initialize(report: ,file_name: nil)
         if file_name.present? && !File.directory?(File.dirname(file_name))
           raise 'Directory does not exist'

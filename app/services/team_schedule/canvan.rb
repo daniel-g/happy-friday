@@ -11,7 +11,7 @@ module TeamSchedule
 
     # Initializes the canvan
     #
-    # @param [Team] team: the team
+    # @param [Team] team the team
     def initialize(team:)
       @team = team
       @tasks = team.tasks.order('tasks.id')

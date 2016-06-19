@@ -5,8 +5,8 @@ class Seed
 
   # Seeds teams from CSV files
   #
-  # @param [File] teams_file: csv file with teams generals
-  # @param [File] performance_file: csv file with performance generals
+  # @param [File] teams_file csv file with teams generals
+  # @param [File] performance_file csv file with performance generals
   def teams(teams_file:, performance_file:)
     data = {}
     data.deep_merge!(team_generals(file: teams_file))
@@ -16,7 +16,7 @@ class Seed
 
   # Seeds tasks from a CSV
   #
-  # @param [File] file: csv file with tasks generals
+  # @param [File] file csv file with tasks generals
   def tasks(file:)
     data = {}
     data.deep_merge!(task_generals(file: file))
@@ -27,7 +27,7 @@ class Seed
 
   # Loads team generals from a CSV to a Hash
   #
-  # @param [File] file: the file
+  # @param [File] file the file
   # @return [Hash<Hash>] team generals by team name
   def team_generals(file:)
     CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|
@@ -42,7 +42,7 @@ class Seed
 
   # Loads team performances from a CSV to a Hash
   #
-  # @param [File] file: the file
+  # @param [File] file the file
   # @return [Hash<Hash>] team performances by team name
   def team_performance(file:)
     CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|
@@ -57,7 +57,7 @@ class Seed
 
   # Loads task generals from a CSV to a Hash
   #
-  # @param [File] file: the file
+  # @param [File] file the file
   # @return [Hash<Hash>] task generals by task ID
   def task_generals(file:)
     CSV.foreach(file, headers: :first_row).reduce({}) do |result, row|

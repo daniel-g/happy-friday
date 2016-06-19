@@ -16,7 +16,7 @@ module TeamSchedule
 
     # Generates a CSV with the data of the report
     #
-    # @param [String] file_name: nil custom file location where to write the CSV report
+    # @param [String] file_name optional custom file location where to write the CSV report
     def generate_csv(file_name: nil)
       TeamSchedule::Report::CSVGenerator.new(
         report: self,

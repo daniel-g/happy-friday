@@ -15,8 +15,8 @@ module TeamSchedule
 
     # Initializes a team schedule task
     #
-    # @param [Task] task: the task
-    # @param [Float] local_time: local time of the team in hours
+    # @param [Task] task the task
+    # @param [Float] local_time local time of the team in hours
     def initialize(task:, local_time:)
       @task = task
       @team = task.team
