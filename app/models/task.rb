@@ -14,7 +14,8 @@ class Task < ActiveRecord::Base
 
   scope :team_cost, ->{
     includes(:team).sum(
-      'tasks.qa_estimation/teams.qa_performance + tasks.dev_estimation/teams.dev_performance'
+      'tasks.qa_estimation/teams.qa_performance' \
+      '+ tasks.dev_estimation/teams.dev_performance'
     )
   }
 
@@ -29,8 +30,18 @@ class Task < ActiveRecord::Base
   end
 
   def team_cost(for_team: nil)
-    calc_team = team || for_team
-    raise 'No team assigned' unless team || for_team
-    qa_estimation/calc_team.qa_performance + dev_estimation/calc_team.dev_performance
+    calc_team = for_team || team
+    raise 'No team assigned' unless calc_team
+    qa_cost_for_team(calc_team) + dev_cost_for_team(calc_team)
+  end
+
+  private
+
+  def qa_cost_for_team(for_team)
+    qa_estimation/for_team.qa_performance
+  end
+
+  def dev_cost_for_team(for_team)
+    dev_estimation/for_team.dev_performance
   end
 end
