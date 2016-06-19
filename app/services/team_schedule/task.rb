@@ -24,6 +24,15 @@ module TeamSchedule
       task.external_id
     end
 
+    def to_h
+      {
+        team_name: team_name,
+        local_schedule: local_schedule,
+        utc_schedule: utc_schedule,
+        external_id: external_id
+      }
+    end
+
     private
 
     def format_time(time_in_hours)

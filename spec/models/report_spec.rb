@@ -1,12 +1,32 @@
 require 'spec_helper'
 
 describe Report do
-  let(:file_name){ Framework.root.join('spec', 'reports', 'report.csv') }
+  subject(:report) { Report.new }
+  let(:data_headers) { [:team_name, :local_schedule, :utc_schedule, :external_id] }
 
-  subject(:report) { Report.new(file_name: file_name) }
+  def to_data_hash(data_array)
+    data_headers.zip(data_array).to_h
+  end
 
-  after do
-    File.delete(file_name) if File.exist?(file_name)
+  describe 'csv generation' do
+    let(:data) {[
+      ['Moscow', '9:00am - 11:00am', '9:00am - 11:00am', '1'],
+      ['Zagreb', '9:00am - 11:00am', '9:00am - 11:00am', '2'],
+      ['London', '9:00am - 11:00am', '9:00am - 11:00am', '3']
+    ]}
+
+    let(:file_name){ Framework.root.join('spec', 'reports', 'report.csv') }
+
+    subject(:report) { Report.new(file_name: file_name) }
+
+    it 'generates a csv file with data' do
+      allow(report).to receive(:data).and_return(data.map{|d| to_data_hash(d) })
+      report.generate!
+      csv = CSV.read(file_name)
+      expect(csv.size - 1).to eq(data.count)
+      expect(csv[1..-1]).to match_array(data)
+      File.delete(file_name)
+    end
   end
 
   context 'one team in utc' do
@@ -14,12 +34,12 @@ describe Report do
     let!(:task_1) { FactoryGirl.create(:task, team: team) }
     let!(:task_2) { FactoryGirl.create(:task, team: team) }
 
+    subject(:data) { report.data }
+
     it 'generates a report of tasks sorted by hour of work' do
-      report.generate!
-      csv = CSV.read(file_name)
-      expect(csv.size - 1).to eq(Task.count)
-      expect(csv[1]).to match_array([team.name, '9:00am - 11:00am', '9:00am - 11:00am', task_1.external_id])
-      expect(csv[2]).to match_array([team.name, '11:00am - 1:00pm', '11:00am - 1:00pm', task_2.external_id])
+      expect(data.size).to eq(Task.count)
+      expect(data[0]).to eq(to_data_hash([team.name, '9:00am - 11:00am', '9:00am - 11:00am', task_1.external_id]))
+      expect(data[1]).to eq(to_data_hash([team.name, '11:00am - 1:00pm', '11:00am - 1:00pm', task_2.external_id]))
     end
   end
 
@@ -28,11 +48,11 @@ describe Report do
     let!(:task_1) { FactoryGirl.create(:task, team: team) }
     let!(:task_2) { FactoryGirl.create(:task, team: team) }
 
+    subject(:data) { report.data }
+
     it 'generates a report of tasks sorted by hour of work' do
-      report.generate!
-      csv = CSV.read(file_name)
-      expect(csv[1]).to match_array([team.name, '9:00am - 11:00am', '6:00am - 8:00am', task_1.external_id])
-      expect(csv[2]).to match_array([team.name, '11:00am - 1:00pm', '8:00am - 10:00am', task_2.external_id])
+      expect(data[0]).to eq(to_data_hash([team.name, '9:00am - 11:00am', '6:00am - 8:00am', task_1.external_id]))
+      expect(data[1]).to eq(to_data_hash([team.name, '11:00am - 1:00pm', '8:00am - 10:00am', task_2.external_id]))
     end
   end
 
@@ -44,14 +64,14 @@ describe Report do
     let!(:london_1) { FactoryGirl.create(:task, team: london) }
     let!(:london_2) { FactoryGirl.create(:task, team: london) }
 
+    subject(:data) { report.data }
+
     it 'generates a report of tasks sorted by hour of work' do
-      report.generate!
-      csv = CSV.read(file_name)
-      expect(csv.size - 1).to eq(Task.count)
-      expect(csv[1]).to match_array([moscow.name, '9:00am - 11:00am', '6:00am - 8:00am', moscow_1.external_id])
-      expect(csv[2]).to match_array([london.name, '9:00am - 11:00am', '9:00am - 11:00am', london_1.external_id])
-      expect(csv[3]).to match_array([moscow.name, '11:00am - 1:00pm', '8:00am - 10:00am', moscow_2.external_id])
-      expect(csv[4]).to match_array([london.name, '11:00am - 1:00pm', '11:00am - 1:00pm', london_2.external_id])
+      expect(data.size).to eq(Task.count)
+      expect(data[0]).to eq(to_data_hash([moscow.name, '9:00am - 11:00am', '6:00am - 8:00am', moscow_1.external_id]))
+      expect(data[1]).to eq(to_data_hash([london.name, '9:00am - 11:00am', '9:00am - 11:00am', london_1.external_id]))
+      expect(data[2]).to eq(to_data_hash([moscow.name, '11:00am - 1:00pm', '8:00am - 10:00am', moscow_2.external_id]))
+      expect(data[3]).to eq(to_data_hash([london.name, '11:00am - 1:00pm', '11:00am - 1:00pm', london_2.external_id]))
     end
   end
 

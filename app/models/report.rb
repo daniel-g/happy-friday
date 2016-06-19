@@ -1,20 +1,31 @@
 class Report
-  attr_accessor :file
+  attr_accessor :file_name
 
   def initialize(file_name: nil)
-    raise 'Directory does not exist' unless File.directory?(File.dirname(file_name))
-    @file = File.open(file_name || default_file_name, 'w')
+    raise 'Directory does not exist' if file_name.present? && !File.directory?(File.dirname(file_name))
+    @file_name = file_name || default_file_name
+  end
+
+  def data
+    @data = []
+    until team_schedules.all?(&:done?) do
+      team_schedules.reject(&:done?).each do |team_schedule|
+        @data << team_schedule.take_task!.to_h
+      end
+    end
+    @data
   end
 
   def generate!
-    CSV.open(file, 'wb',
-      write_headers: true,
-      headers: headers ) do |csv|
-        until team_schedules.all?(&:done?) do
-          team_schedules.reject(&:done?).each do |team_schedule|
-            write(csv: csv, task: team_schedule.take_task!)
-          end
-        end
+    CSV.open(file_name, 'wb', write_headers: true, headers: headers) do |csv|
+      data.each do |task|
+        csv << [
+          task[:team_name],
+          task[:local_schedule],
+          task[:utc_schedule],
+          task[:external_id]
+        ]
+      end
     end
   end
 
@@ -34,14 +45,5 @@ class Report
 
   def headers
     ['TEAM', 'Local time', 'UTC time', 'TASK No.']
-  end
-
-  def write(csv:, task:)
-    csv << [
-      task.team_name,
-      task.local_schedule,
-      task.utc_schedule,
-      task.external_id
-    ]
   end
 end

@@ -21,4 +21,13 @@ describe TeamSchedule::Task do
   it 'tells its external id' do
     expect(scheduled_task.external_id).to eq(task.external_id)
   end
+
+  it 'transforms the data into a hash' do
+    expect(scheduled_task.to_h).to eq(
+      team_name: task.team.name,
+      local_schedule: '9:00am - 11:00am',
+      utc_schedule: '2:00pm - 4:00pm',
+      external_id: task.external_id
+    )
+  end
 end
