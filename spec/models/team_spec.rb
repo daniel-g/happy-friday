@@ -31,13 +31,13 @@ describe Team do
   end
 
   describe 'last team to finish' do
-    let!(:task_1){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 2, external_id: 1) }
-    let!(:task_2){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1, external_id: 2) }
-    let!(:task_3){ FactoryGirl.create(:unassigned_task, dev_estimation: 1, qa_estimation: 1, external_id: 3) }
+    let!(:moscow){ FactoryGirl.create(:team, timezone: 3, dev_performance: 1, qa_performance: 0.5) }
+    let!(:zagreb){ FactoryGirl.create(:team, timezone: 2, dev_performance: 0.25, qa_performance: 0.25) }
+    let!(:london){ FactoryGirl.create(:team, timezone: 0, dev_performance: 1, qa_performance: 1) }
 
-    let!(:moscow){ FactoryGirl.create(:team, timezone: 3, dev_performance: 1, qa_performance: 0.5, tasks: [task_1]) }
-    let!(:zagreb){ FactoryGirl.create(:team, timezone: 2, dev_performance: 0.25, qa_performance: 0.25, tasks: [task_2]) }
-    let!(:london){ FactoryGirl.create(:team, timezone: 0, dev_performance: 1, qa_performance: 1, tasks: [task_3]) }
+    let!(:moscow_task){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 2, external_id: 1, team: moscow) }
+    let!(:zagreb_task){ FactoryGirl.create(:unassigned_task, dev_estimation: 2, qa_estimation: 1, external_id: 2, team: zagreb) }
+    let!(:london_task){ FactoryGirl.create(:unassigned_task, dev_estimation: 1, qa_estimation: 1, external_id: 3, team: london) }
 
     it 'calculates based on task estimations in utc' do
       # Time to finish = dev + qa + check in hour

@@ -12,12 +12,13 @@
 require 'spec_helper'
 
 describe Task do
+  let(:task){ FactoryGirl.create(:task) }
+
   it 'switches task to another team' do
-    task_1 = FactoryGirl.create(:task)
     new_team = FactoryGirl.create(:team)
-    expect(task_1.team).to_not be(new_team)
-    task_1.switch_to_team(new_team)
-    expect(task_1.reload.team).to eq(new_team)
+    expect(task.team).to_not be(new_team)
+    task.switch_to_team(new_team)
+    expect(task.reload.team).to eq(new_team)
   end
 
   it 'switches team with another task' do
@@ -33,20 +34,20 @@ describe Task do
   end
 
   describe 'cost for the team' do
+    let(:moscow){ FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5) }
+    let(:zagreb){ FactoryGirl.create(:team, dev_performance: 0.5, qa_performance: 1) }
+    let(:london){ FactoryGirl.create(:team, dev_performance: 0.25, qa_performance: 0.25) }
+    let(:moscow_task){ FactoryGirl.create(:task, team: moscow, dev_estimation: 3, qa_estimation: 5) }
+    let(:zagreb_task){ FactoryGirl.create(:task, team: zagreb, dev_estimation: 3, qa_estimation: 5) }
+    let(:london_task){ FactoryGirl.create(:task, team: london, dev_estimation: 3, qa_estimation: 5) }
+
     it 'calculates the cost of a task for the team assigned' do
-      team = FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5)
-      task = FactoryGirl.create(:task, team: team, dev_estimation: 3, qa_estimation: 5)
-      expect(task.team_cost).to eq(13)
+      expect(moscow_task.team_cost).to eq(13)
     end
 
     it 'calculates the cost of a group of tasks for the team assigned' do
-      team_1 = FactoryGirl.create(:team, dev_performance: 1, qa_performance: 0.5)
-      team_2 = FactoryGirl.create(:team, dev_performance: 0.5, qa_performance: 1)
-      team_3 = FactoryGirl.create(:team, dev_performance: 0.25, qa_performance: 0.25)
-      task_1 = FactoryGirl.create(:task, team: team_1, dev_estimation: 3, qa_estimation: 5)
-      task_2 = FactoryGirl.create(:task, team: team_2, dev_estimation: 3, qa_estimation: 5)
-      task_3 = FactoryGirl.create(:task, team: team_3, dev_estimation: 3, qa_estimation: 5)
-      expect(Task.team_cost).to eq(task_1.team_cost + task_2.team_cost + task_3.team_cost)
+      total_cost = [moscow_task, zagreb_task, london_task].sum(&:team_cost)
+      expect(Task.team_cost).to eq(total_cost)
     end
 
     it 'raises an exception if no team assigned to that task' do
