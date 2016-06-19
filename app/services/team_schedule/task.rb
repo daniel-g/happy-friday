@@ -13,11 +13,13 @@ module TeamSchedule
     end
 
     def local_schedule
-      "#{format_time(local_time)} - #{format_time(local_time + task.team_cost)}"
+      "#{format_hours(local_time)}" \
+      " - #{format_hours(local_time + task.team_cost)}"
     end
 
     def utc_schedule
-      "#{format_time(utc_time)} - #{format_time(utc_time + task.team_cost)}"
+      "#{format_hours(utc_time)}" \
+      " - #{format_hours(utc_time + task.team_cost)}"
     end
 
     def external_id
@@ -35,11 +37,12 @@ module TeamSchedule
 
     private
 
-    def format_time(time_in_hours)
+    def format_hours(time_in_hours)
       total_minutes = time_in_hours * 60
       hours = total_minutes.to_i / 60
       minutes = total_minutes - hours * 60
-      Time.parse("#{hours.to_i}:#{minutes.to_i}").strftime("%l:%M%P").lstrip
+      long_time_format = "#{hours.to_i}:#{minutes.to_i}"
+      Time.parse(long_time_format).strftime("%l:%M%P").lstrip
     end
 
     def utc_time

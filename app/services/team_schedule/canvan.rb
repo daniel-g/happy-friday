@@ -28,7 +28,7 @@ module TeamSchedule
 
     def current_load
       return 0 if task_pointer < 0
-      tasks[0..task_pointer].sum &:team_cost
+      tasks[0..task_pointer].sum(&:team_cost)
     end
 
     def next_task
