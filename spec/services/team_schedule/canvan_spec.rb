@@ -7,7 +7,7 @@ describe TeamSchedule::Canvan do
 
   subject(:schedule) { TeamSchedule::Canvan.new(team: team) }
 
-  it 'sets tasks in order of creation' do
+  it 'sets tasks sorted by id' do
     expect(schedule.tasks).to eq([task_1, task_2])
   end
 
