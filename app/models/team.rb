@@ -14,11 +14,7 @@ class Team < ActiveRecord::Base
 
   has_many :tasks
 
-  scope :with_tasks, ->{
-    joins('LEFT JOIN tasks ON teams.id = tasks.team_id').
-    where.not(tasks: { id: nil }).
-    uniq
-  }
+  scope :with_tasks, ->{ joins(:tasks).uniq }
 
   def self.last_team_to_finsh
     all.max_by(&:finish_hour_utc)
