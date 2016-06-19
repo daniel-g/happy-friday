@@ -14,7 +14,7 @@ module TeamSchedule
         task: next_task,
         local_time: Team::CHECK_IN_TEAM + current_load
       )
-      move_pointer
+      move_pointer_forward
       task
     end
 
@@ -35,7 +35,7 @@ module TeamSchedule
       tasks[task_pointer + 1]
     end
 
-    def move_pointer
+    def move_pointer_forward
       self.task_pointer += 1
     end
   end
