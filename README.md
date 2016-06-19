@@ -28,7 +28,7 @@ TeamSchedule::Manager.instance.assing_all_tasks!
 
 ## 3. Generate the report
 ```
-Report.new(file_name: 'custom/directory/to/report.csv').generate!
+Report.new.generate_csv(file_name: 'custom/directory/to/report.csv')
 ```
 
 ## 4. Open the report :)
