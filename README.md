@@ -7,7 +7,13 @@ The seeding data is [here](https://gist.github.com/einzige/69a5af5a9df1a483c2745
 
 This app utilizes [Framework](https://github.com/einzige/framework) v0.0.9 and rocks MIT license.
 
+# Setup
+
+## 1. Configure your database
+Change the values in the `.env` file (or overwrite in `.env.local` file)
+
 # Usage
+Run `rake console`. Then follow the next steps in the Framework console.
 
 ## 1. Seed the data
 ```
@@ -26,6 +32,7 @@ Report.new(file_name: 'custom/directory/to/report.csv').generate!
 ```
 
 ## 4. Open the report :)
+You should see it in `custom/directory/to/report.csv`
 
 # Heads up
 
