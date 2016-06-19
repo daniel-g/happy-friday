@@ -5,14 +5,14 @@ class Seed
 
   def teams(teams_file:, performance_file:)
     data = {}
-    data.deep_merge! team_generals(file: teams_file)
-    data.deep_merge! team_performance(file: performance_file)
+    data.deep_merge!(team_generals(file: teams_file))
+    data.deep_merge!(team_performance(file: performance_file))
     create_teams(data)
   end
 
   def tasks(file:)
     data = {}
-    data.deep_merge! task_generals(file: file)
+    data.deep_merge!(task_generals(file: file))
     create_tasks(data)
   end
 
@@ -53,20 +53,20 @@ class Seed
   end
 
   def create_teams(data)
-    truncate(Team)
+    truncate_table(Team)
     data.each do |name, attributes|
       Team.create(attributes)
     end
   end
 
   def create_tasks(data)
-    truncate(Task)
+    truncate_table(Task)
     data.each do |name, attributes|
       Task.create(attributes)
     end
   end
 
-  def truncate model
+  def truncate_table(model)
     model.connection_pool.with_connection { |c| c.truncate(model.table_name) }
   end
 end
