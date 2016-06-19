@@ -4,13 +4,25 @@ class TeamSchedule::Manager
   def assing_all_tasks!
     raise 'No teams to assign' if Team.count.zero?
     raise 'No tasks to assign' if Task.count.zero?
-    Task.update_all(team_id: Team.first.id)
-    reassign!
+    Task.update_all(team_id: nil)
+    basic_assign!
+    optimize!
   end
 
   private
 
-  def reassign!
+  def basic_assign!
+    Task.find_each do |task|
+      # Whoever lasts the least, takes the job
+      team = Team.all.min_by do |team|
+        team.finish_hour_utc +
+        task.team_cost(for_team: team)
+      end
+      team.tasks << task
+    end
+  end
+
+  def optimize!
     Team.find_each do |team|
       team.tasks.find_each do |task|
         assign_best_team!(task: task, teams: Team.where.not(id: team))

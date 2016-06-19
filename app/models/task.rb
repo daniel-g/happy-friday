@@ -28,8 +28,9 @@ class Task < ActiveRecord::Base
     self.update_attributes(team: new_team)
   end
 
-  def team_cost
-    raise 'No team assigned' unless team
-    qa_estimation/team.qa_performance + dev_estimation/team.dev_performance
+  def team_cost(for_team: nil)
+    calc_team = team || for_team
+    raise 'No team assigned' unless team || for_team
+    qa_estimation/calc_team.qa_performance + dev_estimation/calc_team.dev_performance
   end
 end

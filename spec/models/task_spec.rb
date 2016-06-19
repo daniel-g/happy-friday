@@ -45,6 +45,12 @@ describe Task do
       expect(moscow_task.team_cost).to eq(13)
     end
 
+    it 'calculates the cost of a task for a team passed' do
+      moscow_task.update_attributes(team: nil)
+      expect(moscow_task.team_cost(for_team: london)).to eq(32)
+      expect(moscow_task.reload.team).to be_blank
+    end
+
     it 'calculates the cost of a group of tasks for the team assigned' do
       total_cost = [moscow_task, zagreb_task, london_task].sum(&:team_cost)
       expect(Task.team_cost).to eq(total_cost)
