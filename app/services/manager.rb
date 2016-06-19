@@ -41,7 +41,8 @@ class TeamSchedule::Manager
       else
         # Look at the team tasks and see if the task can be switched
         team.tasks.find_each do |other_task|
-          try_switching_tasks(task: task, other_task: other_task)
+          # No need to look at the new team tasks if it was changed to this same team
+          break if try_switching_tasks(task: task, other_task: other_task)
         end
       end
     end
@@ -64,6 +65,9 @@ class TeamSchedule::Manager
     task.switch_team_with_task(other_task)
     if current_total_time < Team.last_team_to_finsh.finish_hour_utc
       task.switch_team_with_task(other_task)
+      false
+    else
+      true
     end
   end
 end
